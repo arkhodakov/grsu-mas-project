@@ -1,6 +1,6 @@
 import osbrain
 
-from SearcherAgent import Searcher
+from agents.searcherAgent import Searcher
 
 if __name__ == '__main__':
     osbrain.config['TRANSPORT'] = 'tcp'
