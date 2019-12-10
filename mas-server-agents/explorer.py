@@ -21,12 +21,15 @@ class Explorer():
             items = tree.xpath(block['list'])
             print("Found %s items" % len(items))
             for item in items:
-                vacancyInformation = []
+                vacancyInformation = {}
                 for key in block['parameters']:
-                    vacancyInformation.append(self.valueOf(
+                    value = self.valueOf(
                         item, block['parameters'][key],
                         func=block['functions'].get(key, None),
-                        regex=block['regex'].get(key, None)))
+                        regex=block['regex'].get(key, None))
+                    vacancyInformation.update({
+                        key: value
+                    })
                 result.append(vacancyInformation)
         return result
 
