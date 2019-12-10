@@ -7,6 +7,7 @@ Perform next steps:
 2. Install Python packages:
     * __osBrain__ -> ```pip install osbrain```
     * __Flask__ -> ```pip install flask```
+    * __Google Search Result__ -> ```pip install google-search-results```
 
 ## Launch instructions
 

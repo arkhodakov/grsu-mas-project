@@ -3,7 +3,7 @@ import osbrain
 from osbrain.address import *
 
 
-class Interactor():
+class UserInteractionAgent():
     __defaultRemote__ = AgentAddress('tcp', '127.0.0.1:25565', 'REP', 'server', 'pickle')
     
     def __init__(self):

@@ -14,3 +14,27 @@ h1, h2, h3, h4, h5, h6, p, ul {
 	margin: 0;
 	padding: 0;
 }
+
+.masthead {
+	height: 100vh;
+	min-height: 500px;
+	background-image: url('https://source.unsplash.com/BtbjCFUvBXs/1920x1080');
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+  }
+
+.footer-main {
+	color: rgba(255,255,255,.4);
+	font-size: 85%;
+	font-weight: 400;
+}
+
+.footer-main a {
+    color: rgba(255,255,255,.7);
+}
+
+a {
+    text-decoration: none;
+    background-color: transparent;
+}
