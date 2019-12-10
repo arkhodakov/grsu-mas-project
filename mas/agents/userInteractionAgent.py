@@ -1,10 +1,9 @@
 import osbrain
-
 from osbrain.address import *
 
 
 class UserInteractionAgent():
-    __defaultRemote__ = AgentAddress('tcp', '127.0.0.1:25565', 'REP', 'server', 'pickle')
+    __defaultRemote__ = AgentAddress('tcp', '127.0.0.1:25876', 'REP', 'server', 'pickle')
     
     def __init__(self):
         osbrain.config['TRANSPORT'] = 'tcp'

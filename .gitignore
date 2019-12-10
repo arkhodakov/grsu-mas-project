@@ -1,6 +1,13 @@
 node_modules/
 
-# ------ Custom ------ #
+# ------ Custom: Python ------ #
 __pycache__
-.idea
+
+# ------ Custom: Visual Studio Code ----- #
 .vscode
+
+# ------ Custom. PyCharm ------ #
+.idea
+
+# ----- Custom: Modules ------ #
+**/.google-cookie
