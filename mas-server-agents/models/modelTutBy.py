@@ -22,7 +22,7 @@ class TutByModel(Model):
                     regex=dict()
                 ),
                 dict(
-                    list="//div[contains(@data-qa, 'vacancy-serp__vacancy')]",
+                    list="//div[@data-qa='vacancy-serp__vacancy']",
                     parameters=dict(
                         name=".//a[contains(@data-qa, 'vacancy-serp__vacancy-title')]/text()",
                         price=".//div[contains(@data-qa, 'vacancy-serp__vacancy-compensation')]/text()[string-length(.)>0]",
