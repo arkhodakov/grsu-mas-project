@@ -16,18 +16,18 @@ class Explorer():
 
         content = requests.get(url, headers=self.headers).content
         tree = html.fromstring(content)
-        open('fl.html', 'wb').write(content)
 
-        items = tree.xpath(model.content['list'])
-        print("Found %s items" % len(items))
-        for item in items:
-            vacancyInformation = []
-            for key in model.content['parameters']:
-                vacancyInformation.append(self.valueOf(
-                    item, model.content['parameters'][key],
-                    func=model.content['functions'].get(key, None),
-                    regex=model.content['regex'].get(key, None)))
-            result.append(vacancyInformation)
+        for block in model.content:
+            items = tree.xpath(block['list'])
+            print("Found %s items" % len(items))
+            for item in items:
+                vacancyInformation = []
+                for key in block['parameters']:
+                    vacancyInformation.append(self.valueOf(
+                        item, block['parameters'][key],
+                        func=block['functions'].get(key, None),
+                        regex=block['regex'].get(key, None)))
+                result.append(vacancyInformation)
         return result
 
     def valueOf(self, item, xpath, default=None, func=None, regex=None):
@@ -37,7 +37,6 @@ class Explorer():
         value = item.xpath(xpath)
         if len(value) != 0:
             if func:
-                print(value)
                 value = func(value)
             value = value[0].strip('    \t\n\r')
             if regex is not None:
