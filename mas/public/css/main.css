@@ -18,7 +18,7 @@ h1, h2, h3, h4, h5, h6, p, ul {
 .masthead {
 	height: 100vh;
 	min-height: 500px;
-	background-image: url('https://source.unsplash.com/BtbjCFUvBXs/1920x1080');
+	background-image: url('/public/images/background.jpg');
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;

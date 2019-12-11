@@ -2,7 +2,7 @@
 import multiprocessing
 import json
 
-from flask import Flask, render_template, request
+from flask import Flask, Blueprint, render_template, request
 
 class AgentRunningProcess(multiprocessing.Process):
     def __init__(self, ns):
@@ -17,25 +17,27 @@ class AgentRunningProcess(multiprocessing.Process):
 if __name__ == '__main__':
     # ======> Flask <====== #
     print("[ROOT] Setting up FLASK")
-    app = Flask("MAS CourseWork",
+    app = Flask("MAS Course Work",
         static_folder = './public',
         template_folder="./static") 
 
 
     # =====> Routes <====== #
-    print("[ROOT] Setting up FLASK views")    
-    @app.route('/')
-    @app.route('/index')
+    print("[ROOT] Setting up FLASK views")
+    indexBlueprint = Blueprint('index', __name__)
+    
+    @indexBlueprint.route('/')
+    @indexBlueprint.route('/index')
     def index():
         return render_template("index.html")
+    app.register_blueprint(indexBlueprint)
 
-    @app.route('/agent/search', methods = ['GET', 'POST'])
+    apiBlueprint = Blueprint('api', __name__)
+    
+    @apiBlueprint.route('/agent/search', methods=['POST'])
     def agentSearch():
-        data = request.get_json()
-        print("Request: %s" % data)
-        response = ns.value.request(data)
-        return response
-
+        return ns.value.request(request.get_json())
+    app.register_blueprint(apiBlueprint)
 
     # ======> osBrain <====== #
     processes = list()
@@ -50,4 +52,5 @@ if __name__ == '__main__':
 
     print("[ROOT] OSBRAIN Interactor: %s" % str(ns.value))
     
+    app.config.from_object('configurations.DevelopmentConfig')
     app.run()

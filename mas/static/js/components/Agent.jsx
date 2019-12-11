@@ -8,7 +8,13 @@ export default class Agent extends React.Component {
     super(props);
     this.state = {
       isLoading: false,
+      position: "",
       keywords: "",
+      salary: 0,
+      county: "",
+      city: "",
+      withoutExperience: false,
+
       data: []
     };
 
@@ -17,8 +23,12 @@ export default class Agent extends React.Component {
   }
 
   handleChange(event) {
+    const target = event.target;
+    const value = target.type === "checkbox" ? target.checked : target.value;
+    const name = target.id;
+
     this.setState({
-      keywords: event.target.value
+      [name]: value
     });
   }
 
@@ -33,7 +43,7 @@ export default class Agent extends React.Component {
       })
       .then(response => {
         console.log(response.data);
-        console.log(response.data[0])
+        console.log(response.data[0]);
         this.setState({
           data: response.data,
           isLoading: false
@@ -59,12 +69,14 @@ export default class Agent extends React.Component {
 
     let content =
       this.state.isLoading == true ? (
-        <ClipLoader
-          sizeUnit={"px"}
-          size={150}
-          color={"#123abc"}
-          loading={this.state.isLoading}
-        />
+        <div class="d-flex h-100 justify-content-center align-items-center">
+          <ClipLoader
+            sizeUnit={"px"}
+            size={150}
+            color={"#123abc"}
+            loading={this.state.isLoading}
+          />
+        </div>
       ) : null;
 
     let card = (
@@ -89,38 +101,111 @@ export default class Agent extends React.Component {
           <div class="col-md-4 mx-auto">
             <div class="row">
               <div class="col-md-12 mx-auto">
-                <h4 class="mb-3 text-center">Vacancy Search Agent</h4>
-                <p class="mb-3 text-center">
-                  Details about your vacancy?
-                </p>
+                <h4 class="mb-3">Vacancy parameters</h4>
                 <form
                   class="needs-validation"
-                  novalidate=""
                   onSubmit={this.handleSubmit}
+                  noValidate
                 >
                   <div class="mb-3">
+                    <label for="position">Position</label>
                     <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">I'm a</span>
+                      </div>
                       <input
                         type="text"
                         class="form-control"
-                        id="keywords"
-                        placeholder="Keywords for vacancy"
-                        required=""
-                        value={this.state.keywords}
+                        id="position"
+                        placeholder="Position"
+                        required
+                        value={this.state.position}
                         onChange={this.handleChange}
                       />
+                      <div class="invalid-feedback">Position is required</div>
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="salary">Minimum salary</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="salary"
+                      placeholder="0"
+                      value={this.state.salary}
+                      onChange={this.handleChange}
+                    />
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="keywords">Keywords</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="keywords"
+                      placeholder="Keywords about vacancy"
+                      value={this.state.keywords}
+                      onChange={this.handleChange}
+                    />
+                    <small class="text-muted">
+                      It can be technologies, tools, skills
+                    </small>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label for="country">Country</label>
+                      <select
+                        class="custom-select d-block w-100"
+                        id="country"
+                        required
+                        value={this.state.country}
+                        onChange={this.handleChange}
+                      >
+                        <option value="Belarus">Belarus</option>
+                      </select>
                       <div class="invalid-feedback">
-                        Request keywords are required.
+                        Please select a valid country.
                       </div>
                     </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="city">City</label>
+                      <select
+                        class="custom-select d-block w-100"
+                        id="city"
+                        value={this.state.city}
+                        onChange={this.handleChange}
+                      >
+                        <option value="Hrodno">Hrodno</option>
+                      </select>
+                      <div class="invalid-feedback">
+                        Please provide a valid city.
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr class="mb-4" />
+                  <div class="custom-control custom-checkbox">
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="withoutExperience"
+                      value={this.state.withoutExperience}
+                      onChange={this.handleChange}
+                    />
+                    <label class="custom-control-label" for="withoutExperience">
+                      No work experience
+                    </label>
                   </div>
 
                   <hr class="mb-4" />
                   <button
                     class="btn btn-primary btn-lg btn-block"
                     type="submit"
+                    disabled={this.state.isLoading}
                   >
-                    Search
+                    {this.state.isLoading ? "Searching..." : "Search"}
                   </button>
                 </form>
               </div>
