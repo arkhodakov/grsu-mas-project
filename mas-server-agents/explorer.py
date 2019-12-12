@@ -1,40 +1,74 @@
-import requests
 import re
+import requests
 
 from lxml import html
+from models.model import Model
 
 
 class Explorer():
+    """
+    Класс 'исследователя', который проходится по странице с определённой моделью
+    и вытягивает из неё данные о вакансиях.
+    
+    Аттрибуты:
+    -------
+    maxItems : int
+        максимальное количество вакансий с каждого раздела веб-сатринцы
+    """
+    
+    maxItems = 10
 
-    headers = {
-        'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-        'referer': "https://www.google.by/"
-    }
-
-    def getContent(self, url, model) -> dict():
-        result = []
-
-        content = requests.get(url, headers=self.headers).content
+    def getContentFromURL(self, session: requests.Session, url: str, model: Model) -> []:
+        """
+        Получение списка вакансий из веб-страницы по определённому адресу (url) с использованием сессии Viewer агента
+        и модели веб-сайта.
+        
+        Возвращаемое значение:
+        -------
+        array
+            вакансии в виде словаря с параметрами, указанными в модели 
+        """
+        
+        content = session.get(url).content
         tree = html.fromstring(content)
 
+        result = []
         for block in model.content:
             items = tree.xpath(block['list'])
-            print("Found %s items" % len(items))
+            type = block['type']
+            counter = 0
             for item in items:
-                vacancyInformation = {}
+                if(counter > self.maxItems):
+                    break
+                vacancyInformation = {"type": type}
                 for key in block['parameters']:
-                    value = self.valueOf(
-                        item, block['parameters'][key],
-                        func=block['functions'].get(key, None),
-                        regex=block['regex'].get(key, None))
+                    xpath = block['parameters'][key]
+                    value = None
+                    if xpath == "url":
+                        value = url
+                    else:
+                        value = self.valueOf(
+                            item, xpath,
+                            func=block['functions'].get(key, None),
+                            regex=block['regex'].get(key, None))
                     vacancyInformation.update({
                         key: value
                     })
                 result.append(vacancyInformation)
+                counter += 1
         return result
 
-    def valueOf(self, item, xpath, default=None, func=None, regex=None):
-        # ----- Check for empty path
+    def valueOf(self, item: html.HtmlElement, xpath: str, default: str = None, regex: str = None, func=None) -> str:
+        """
+        Плучение информации из элемента списка вакансий по определённому локатору (xpath)
+        с применением функций парсинга (func) и регулярных выражений (regex).
+        
+        Возвращаемое значение:
+        -------
+        str
+            значение элемента по локатору
+        """
+        
         if xpath == "" or xpath == None:
             return default
         value = item.xpath(xpath)

@@ -6,6 +6,11 @@ from agents.viewerAgent import ViewerAgent
 localEndPoint = "127.0.0.1:25876"
 
 if __name__ == '__main__':
+    """
+    Основной запускающий файл системы.
+    Создаёт и запускает сервер osBrain и двух агентов: Searcher - поиска в сети - и Viewer - парсинг (срепинг) данных с сайта
+    """
+    
     osbrain.config['TRANSPORT'] = 'tcp'
     osbrain.config['SERIALIZER'] = 'json'
 
