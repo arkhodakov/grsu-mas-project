@@ -20,7 +20,7 @@ function getErrorMessage() {
   return (
     <div class="d-flex h-100 justify-content-center align-items-center">
       <div class="alert alert-danger" role="alert">
-        Sorry... Exception occurred while searching. Try again!
+        Произошла ошибка во время выполнения запроса. Пожалуйста, повторите Ваш запрос.
       </div>
     </div>
   );
@@ -30,7 +30,7 @@ function getInitialMessage() {
   return (
     <div class="d-flex h-100 justify-content-center align-items-center">
       <div class="alert alert-primary" role="alert">
-        Enter parameters of vacancy you want to find and press 'Search'
+        Введите критерии вакансии и нажмите кнопку "Создать запрос"
       </div>
     </div>
   );
@@ -186,7 +186,7 @@ export default class Agent extends React.Component {
         {vacanciesRelated.length > 0 ? (
           <div>
             <hr class="mb-4" />
-            <h4 class="mb-3 text-center">Related vacancies</h4>
+            <h4 class="mb-3 text-center">Дополнительные вакансии</h4>
             {vacanciesRelated}
           </div>
         ) : null}
@@ -210,33 +210,30 @@ export default class Agent extends React.Component {
           <div class="col-md-4 mx-auto">
             <div class="row">
               <div class="col-md-12 mx-auto">
-                <h4 class="mb-3">Vacancy parameters</h4>
+                <h4 class="mb-3">Критерии запроса</h4>
                 <form
                   class="needs-validation"
                   onSubmit={this.handleSubmit}
                   noValidate
                 >
                   <div class="mb-3">
-                    <label for="position">Position</label>
+                    <label for="position">Должность</label>
                     <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text">I'm a</span>
-                      </div>
                       <input
                         type="text"
                         class="form-control"
                         id="position"
-                        placeholder="Position"
+                        placeholder="Хочу работать"
                         required
                         value={this.state.position}
                         onChange={this.handleChange}
                       />
-                      <div class="invalid-feedback">Position is required</div>
+                      <div class="invalid-feedback">Должность не может быть пустой</div>
                     </div>
                   </div>
 
                   <div class="mb-3">
-                    <label for="salary">Minimum salary</label>
+                    <label for="salary">Заработная плата от ... (USD)</label>
                     <input
                       type="text"
                       class="form-control"
@@ -249,7 +246,7 @@ export default class Agent extends React.Component {
 
                   <div class="row">
                     <div class="col-md-6 mb-3">
-                      <label for="country">Country</label>
+                      <label for="country">Страна</label>
                       <select
                         class="custom-select d-block w-100"
                         id="country"
@@ -257,24 +254,24 @@ export default class Agent extends React.Component {
                         value={this.state.country}
                         onChange={this.handleChange}
                       >
-                        <option value="Belarus">Belarus</option>
+                        <option value="Беларусь">Беларусь</option>
                       </select>
                       <div class="invalid-feedback">
-                        Please select a valid country.
+                      Пожалуйста, введите реальное название страны.
                       </div>
                     </div>
                     <div class="col-md-6 mb-3">
-                      <label for="city">City</label>
+                      <label for="city">Город</label>
                       <select
                         class="custom-select d-block w-100"
                         id="city"
                         value={this.state.city}
                         onChange={this.handleChange}
                       >
-                        <option value="Hrodno">Hrodno</option>
+                        <option value="Гродно">Гродно</option>
                       </select>
                       <div class="invalid-feedback">
-                        Please provide a valid city.
+                        Пожалуйста, введите реальное название города.
                       </div>
                     </div>
                   </div>
@@ -289,17 +286,17 @@ export default class Agent extends React.Component {
                       onChange={this.handleChange}
                     />
                     <label class="custom-control-label" for="withoutExperience">
-                      No work experience
+                      Без опыта работы
                     </label>
                   </div>
 
                   <hr class="mb-4" />
                   <button
-                    class="btn btn-primary btn-lg btn-block"
+                    class="btn btn-primary btn-lg btn-block w-75 m-auto"
                     type="submit"
                     disabled={this.state.isLoading}
                   >
-                    {this.state.isLoading ? "Searching..." : "Search"}
+                    {this.state.isLoading ? "Запрос обрабатывается..." : "Создать запрос"}
                   </button>
                 </form>
               </div>
