@@ -1,7 +1,13 @@
 import React from "react";
 import axios from "axios";
-
+import styled, { keyframes } from "styled-components";
+import ZoomInUp from "react-animations";
 import ClipLoader from "react-spinners/ClipLoader";
+
+const ZoomInUpAnimation = keyframes`${ZoomInUp}`;
+const ZoomInUpDiv = styled.div`
+  animation: infinite 10s ${ZoomInUpAnimation};
+`;
 
 function getLoader(loading) {
   return (
@@ -20,7 +26,8 @@ function getErrorMessage() {
   return (
     <div class="d-flex h-100 justify-content-center align-items-center">
       <div class="alert alert-danger" role="alert">
-        Произошла ошибка во время выполнения запроса. Пожалуйста, повторите Ваш запрос.
+        Произошла ошибка во время выполнения запроса. Пожалуйста, повторите Ваш
+        запрос.
       </div>
     </div>
   );
@@ -73,14 +80,12 @@ export default class Agent extends React.Component {
   }
 
   handleSubmit(event) {
+    console.log("Request...");
     this.setState({
       isLoadingErrorHandled: false,
       isLoading: true,
       data: []
     });
-
-    const CancelToken = axios.CancelToken;
-    const source = CancelToken.source();
 
     axios
       .post(
@@ -92,13 +97,14 @@ export default class Agent extends React.Component {
           country: this.state.county,
           city: this.state.city
         },
-        { timeout: 20000, cancelToken: source.token }
+        { timeout: 40000 }
       )
       .then(response => {
         console.log("Request accepted. Response ->");
         console.log(response.data);
         this.setState({
           data: response.data,
+          isLoadingErrorHandled: false,
           isLoading: false
         });
       })
@@ -111,10 +117,6 @@ export default class Agent extends React.Component {
         });
       });
 
-    if (this.state.isLoadingErrorHandled) {
-      source.cancel("Operation aborted by error handler");
-    }
-
     event.preventDefault();
   }
 
@@ -122,21 +124,24 @@ export default class Agent extends React.Component {
     let content = data.map(url =>
       url["vacancies"].map(item =>
         type == item["type"] ? (
-          <a href={item["link"]}>
-            <div class="card">
-              <div class="card-body">
-                <img class="card-img-top" src={item["image"]} />
-                <h5 class="card-title">{item["name"]}</h5>
-                <h6 class="card-subtitle mb-2 font-weight-bold">
-                  {item["salary"]}
-                </h6>
-                <h6 class="card-subtitle mb-2 text-muted">
-                  {item["company"]} - {item["location"]}
-                </h6>
-                <p class="card-text">{item["description"]}</p>
+          <ZoomInUpDiv>
+            <a href={item["link"]}>
+              <div class="card">
+                <div class="card-body">
+                  <img class="card-img-top" src={item["image"]} />
+                  <h5 class="card-title vac-name">{item["name"]}</h5>
+                  <h6 class="card-subtitle mb-2 font-weight-bold">
+                    {item["salary"]}
+                  </h6>
+                  <h6 class="card-subtitle mb-2 text-muted">
+                    {item["company"]}
+                    {item["location"] ? " - " + item["location"] : null}
+                  </h6>
+                  <p class="card-text">{item["description"]}</p>
+                </div>
               </div>
-            </div>
-          </a>
+            </a>
+          </ZoomInUpDiv>
         ) : null
       )
     );
@@ -228,7 +233,9 @@ export default class Agent extends React.Component {
                         value={this.state.position}
                         onChange={this.handleChange}
                       />
-                      <div class="invalid-feedback">Должность не может быть пустой</div>
+                      <div class="invalid-feedback">
+                        Должность не может быть пустой
+                      </div>
                     </div>
                   </div>
 
@@ -254,10 +261,10 @@ export default class Agent extends React.Component {
                         value={this.state.country}
                         onChange={this.handleChange}
                       >
-                        <option value="Беларусь">Беларусь</option>
+                        <option>Беларусь</option>
                       </select>
                       <div class="invalid-feedback">
-                      Пожалуйста, введите реальное название страны.
+                        Пожалуйста, введите реальное название страны.
                       </div>
                     </div>
                     <div class="col-md-6 mb-3">
@@ -268,7 +275,7 @@ export default class Agent extends React.Component {
                         value={this.state.city}
                         onChange={this.handleChange}
                       >
-                        <option value="Гродно">Гродно</option>
+                        <option>Гродно</option>
                       </select>
                       <div class="invalid-feedback">
                         Пожалуйста, введите реальное название города.
@@ -296,7 +303,9 @@ export default class Agent extends React.Component {
                     type="submit"
                     disabled={this.state.isLoading}
                   >
-                    {this.state.isLoading ? "Запрос обрабатывается..." : "Создать запрос"}
+                    {this.state.isLoading
+                      ? "Запрос обрабатывается..."
+                      : "Создать запрос"}
                   </button>
                 </form>
               </div>

@@ -30,7 +30,7 @@ class SearcherAgent(Agent):
         response = self.recv(self.__viewer__)
         return response
 
-    def searchInGoogle(self, message: dict, maxCountOfLinks : int = 25) -> []:
+    def searchInGoogle(self, message: dict, maxCountOfLinks : int = 5) -> []:
         """
         Выполняет поиск в Google по запросу с параметрами, которые пришли от клиента (от веб-сайта MAS).
         

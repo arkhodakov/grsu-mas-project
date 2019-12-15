@@ -36,7 +36,8 @@ if __name__ == '__main__':
     
     @apiBlueprint.route('/agent/search', methods=['POST'])
     def agentSearch():
-        return ns.value.request(request.get_json())
+        data = ns.value.request(request.get_json())
+        return data
     app.register_blueprint(apiBlueprint)
 
     # ======> osBrain <====== #

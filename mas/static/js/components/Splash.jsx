@@ -9,7 +9,6 @@ export default class Splash extends React.Component {
             <div class="col-12 text-center">
               <div class="py-5 text-center">
                 <h2 class="font-weight-light">Мультиагентная система поиска вакансий</h2>
-                <p class="lead">Мы поможем вам найти новое место работы</p>
               </div>
             </div>
           </div>

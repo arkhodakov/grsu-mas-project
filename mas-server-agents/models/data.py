@@ -67,7 +67,7 @@ class TutBy(Model):
                         link="url"
                     ),
                     functions=dict(
-                        salary=lambda x: [
+                        salary=lambda x, model: [
                             " ".join([item.replace("\xa0", "") for item in x])]
                     ),
                     regex=dict()
@@ -83,13 +83,13 @@ class TutBy(Model):
                         link=".//a[contains(@data-qa, 'vacancy-serp__vacancy-title')]/@href"
                     ),
                     functions=dict(
-                        name=lambda x: [item.replace(
+                        name=lambda x, model: [item.replace(
                             "\xa0", "") for item in x],
-                        salary=lambda x: [item.replace(
+                        salary=lambda x, model: [item.replace(
                             "\xa0", "") for item in x],
-                        company=lambda x: [item.replace(
+                        company=lambda x, model: [item.replace(
                             "\xa0", "") for item in x],
-                        location=lambda x: [item.replace(
+                        location=lambda x, model: [item.replace(
                             "\xa0", "") for item in x],
                     ),
                     regex=dict()
@@ -110,16 +110,16 @@ class Jooble(Model):
                     type="main",
                     parameters=dict(
                         name=".//h2[@class='position']//*/text()",
-                        link=".//a[@class='link-position job-marker-js visited']/@href",
+                        link=".//a[contains(@class, 'link-position job-marker-js')]/@href",
                         salary=".//span[@class='salary']/text()",
                         company=".//span[@class='gray_text company-name']/text()",
                         location=".//span[@class='date_location__region']/text()"
                     ),
                     functions=dict(
-                        name=lambda x: [
+                        name=lambda x, model: [
                             "".join(x)
                         ],
-                        salary=lambda x: [
+                        salary=lambda x, model: [
                             " ".join([item.replace("\xa0", "") for item in x])]
                     ),
                     regex=dict()
@@ -151,12 +151,28 @@ class Trudbox(Model):
                 )
             ]
         )
-
-
-# ====> Blocked <==== #
-class Belmeta(Model):
+        
+class DevBy(Model):
     def __init__(self):
         super().__init__(
-            domain="belmeta.com",
-            blocked=True
+            domain="jobs.dev.by",
+            name="Dev.by",
+            blocked=False,
+            content=[
+                dict(
+                    list="//div[@class='vacancies-list-item__body js-vacancies-list-item--open']",
+                    type="main",
+                    parameters=dict(
+                        name=".//a[@class='vacancies-list-item__link_block']/text()",
+                        description=".//div[@class='vacancies-list-item__technology-tags']/descendant::*/text()",
+                        link=".//a[@class='vacancies-list-item__link_block']/@href",
+                        salary=".//div[@class='vacancies-list-item__salary']/text()",
+                        company=".//a[@class='js-vacancy__footer__company-name']/text()"
+                    ),
+                    functions=dict(
+                        link = lambda x, model: "%s%s" % (model.domain, str(x))
+                    ),
+                    regex=dict()
+                )
+            ]
         )

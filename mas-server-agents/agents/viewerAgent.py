@@ -47,7 +47,8 @@ class ViewerAgent(Agent):
     models = [
         TutBy(),
         Jooble(),
-        Belmeta()
+        Trudbox(),
+        DevBy()
     ]
     
     countOfProcesses = 5
@@ -118,7 +119,7 @@ class ViewerAgent(Agent):
         info = {
             "name": None,
             "domain": domain,
-            "title": self.getUrlPageTitle(session, url),
+            "title": "",
             "url": url,
             "vacancies": []
         }
@@ -132,6 +133,8 @@ class ViewerAgent(Agent):
             content = self.explorer.getContentFromURL(session, url, model)
             info['vacancies'].extend(content)
             self.log_info(" > Content: %s vacancies" % len(content))
+        else:
+            info['title'] = self.getUrlPageTitle(session, url)
 
         return info
 
@@ -146,7 +149,7 @@ class ViewerAgent(Agent):
             строка (JSON) со всеми url адресами и информацией о них
         """
         
-        pool = Pool(countOfProcesses)
+        pool = Pool(self.countOfProcesses)
         urls = json.loads(message)
 
         response = pool.map(self.exploreUrlAddress, urls)

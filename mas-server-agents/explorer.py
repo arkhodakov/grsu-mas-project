@@ -16,7 +16,7 @@ class Explorer():
         максимальное количество вакансий с каждого раздела веб-сатринцы
     """
     
-    maxItems = 10
+    maxItems = 5
 
     def getContentFromURL(self, session: requests.Session, url: str, model: Model) -> []:
         """
@@ -48,6 +48,7 @@ class Explorer():
                         value = url
                     else:
                         value = self.valueOf(
+                            model,
                             item, xpath,
                             func=block['functions'].get(key, None),
                             regex=block['regex'].get(key, None))
@@ -58,7 +59,7 @@ class Explorer():
                 counter += 1
         return result
 
-    def valueOf(self, item: html.HtmlElement, xpath: str, default: str = None, regex: str = None, func=None) -> str:
+    def valueOf(self, model, item: html.HtmlElement, xpath: str, default: str = None, regex: str = None, func=None) -> str:
         """
         Плучение информации из элемента списка вакансий по определённому локатору (xpath)
         с применением функций парсинга (func) и регулярных выражений (regex).
@@ -74,7 +75,7 @@ class Explorer():
         value = item.xpath(xpath)
         if len(value) != 0:
             if func:
-                value = func(value)
+                value = func(value, model)
             value = value[0].strip('    \t\n\r')
             if regex is not None:
                 try:
